@@ -1,0 +1,6 @@
+/Server/HytaleServer.jar
+/Server/HytaleServer.aot
+# O de forma general para cualquier archivo pesado:
+*.jar
+*.aot
+*.zip
