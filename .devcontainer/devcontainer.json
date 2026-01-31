@@ -6,5 +6,6 @@
             "extensions": ["vscjava.vscode-java-pack"]
         }
     },
-    "forwardPorts": [5520]
+    "forwardPorts": [5520],
+    "postStartCommand": "chmod +x update.sh && ./update.sh"
 }
