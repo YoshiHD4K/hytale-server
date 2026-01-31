@@ -7,5 +7,5 @@
         }
     },
     "forwardPorts": [5520],
-    "postStartCommand": "chmod +x update.sh && ./update.sh"
+    "postStartCommand": "chmod +x menu.sh && ./menu.sh"
 }

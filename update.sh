@@ -1,31 +1,28 @@
 #!/bin/bash
 
-echo "🔄 Comprobando si hay una nueva versión de Hytale Server..."
+# Configuración de rutas
+DOWNLOADER="./tools/hytale-downloader"
+SERVER_ZIP="hytale_server_update.zip"
 
-# 1. Traer información del repositorio oficial
-git fetch upstream main --quiet
+echo "🔍 Consultando última versión disponible de Hytale..."
 
-# 2. Comparar versiones (Hashes de Git)
-LOCAL_VER=$(git rev-parse HEAD)
-UPSTREAM_VER=$(git rev-parse upstream/main)
+# Intentar descargar la última versión
+# El CLI detectará si ya tienes la versión 2026.01.28 y no bajará nada si no es necesario
+$DOWNLOADER -download-path "$SERVER_ZIP"
 
-if [ "$LOCAL_VER" != "$UPSTREAM_VER" ]; then
-    echo "✨ ¡Nueva versión detectada!"
+if [ -f "$SERVER_ZIP" ]; then
+    echo "📦 ¡Nueva actualización descargada! Aplicando cambios..."
     
-    # Guardar tus mundos y configs locales para que no haya conflictos
-    echo "📦 Protegiendo archivos locales (mundos y configs)..."
-    git stash
+    # Descomprimir sobreescribiendo archivos del sistema 
+    # pero PROTEGIENDO tus datos (mundos, configuraciones y mods)
+    unzip -o "$SERVER_ZIP" -x "universe/*" "config.json" "permissions.json" "mods/*" "whitelist.json"
     
-    # Descargar lo nuevo
-    echo "📥 Descargando actualización..."
-    git pull upstream main --rebase
+    # Limpiar el archivo temporal
+    rm "$SERVER_ZIP"
     
-    # Restaurar tus archivos
-    git stash pop
-    
-    # Dar permisos al script de arranque
+    # Dar permisos al ejecutable del servidor
     chmod +x run.sh
-    echo "✅ Servidor actualizado correctamente."
+    echo "✅ Servidor actualizado con éxito."
 else
-    echo "🎉 Ya tienes la versión más reciente del servidor."
+    echo "🎉 Ya tienes la versión más reciente ($($DOWNLOADER -print-version))."
 fi
