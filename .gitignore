@@ -4,3 +4,10 @@
 *.jar
 *.aot
 *.zip
+# Basura del servidor
+*.bak
+*.zip
+logs/
+updater/staging/
+tools/*.exe
+*.bat
